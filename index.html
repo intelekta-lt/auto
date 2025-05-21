@@ -20,9 +20,11 @@
       max-width: 380px;
       background-color: #2E2B3A;
       border-radius: 18px;
-      border: 2px solid #B689F4; /* Alyvinis rėmelis */
+      border: 2px solid #B689F4;
       overflow: hidden;
-      box-shadow: 0 0 16px rgba(182, 137, 244, 0.3); /* švelnus glow */
+      box-shadow: 0 0 16px rgba(182, 137, 244, 0.4);
+      display: flex;
+      flex-direction: column;
     }
     .chat-header {
       background-color: #3C1D66;
@@ -31,6 +33,24 @@
       font-weight: bold;
       font-size: 1.1em;
       color: #FFFFFF;
+      position: relative;
+    }
+    .clean-btn {
+      position: absolute;
+      right: 12px;
+      top: 10px;
+      background: none;
+      border: 1px solid #B689F4;
+      color: #B689F4;
+      font-size: 0.75em;
+      padding: 4px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .clean-btn:hover {
+      background-color: #B689F4;
+      color: #1C1429;
     }
     .chat-messages {
       padding: 14px;
@@ -50,7 +70,7 @@
     }
     .user {
       align-self: flex-end;
-      background-color: #5B2DA1;
+      background-color: #8549C6;
       color: white;
     }
     .bot {
@@ -75,7 +95,7 @@
       color: white;
     }
     .chat-input button {
-      background-color: #6A4ACD;
+      background-color: #B689F4;
       color: white;
       border: none;
       padding: 0 20px;
@@ -84,13 +104,17 @@
       transition: background-color 0.3s ease;
     }
     .chat-input button:hover {
-      background-color: #8B6EF1;
+      background-color: #D5B9FA;
+      color: #1C1429;
     }
   </style>
 </head>
 <body>
   <div class="chat-container">
-    <div class="chat-header">AI Asistentas</div>
+    <div class="chat-header">
+      AI Asistentas
+      <button class="clean-btn" onclick="resetChat()">Clean chat</button>
+    </div>
     <div class="chat-messages" id="chat"></div>
     <form class="chat-input" id="chat-form">
       <input type="text" id="message-input" placeholder="Rašyk žinutę..." autocomplete="off" />
@@ -99,6 +123,8 @@
   </div>
 
   <script>
+    let threadId = null;
+
     const form = document.getElementById("chat-form");
     const input = document.getElementById("message-input");
     const chat = document.getElementById("chat");
@@ -114,11 +140,12 @@
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ message, threadId })
       });
 
       const data = await response.json();
       appendMessage("bot", data.reply || "Klaida gaunant atsakymą.");
+      if (data.threadId) threadId = data.threadId;
     });
 
     function appendMessage(sender, text) {
@@ -127,6 +154,11 @@
       msg.textContent = text;
       chat.appendChild(msg);
       chat.scrollTop = chat.scrollHeight;
+    }
+
+    function resetChat() {
+      chat.innerHTML = "";
+      threadId = null;
     }
   </script>
 </body>
