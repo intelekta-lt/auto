@@ -9,36 +9,36 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Tik POST metodas leidžiamas" });
   }
 
-  const { message } = req.body;
+  const { message, threadId: incomingThreadId } = req.body;
 
   try {
-    // Sukuriama pokalbio gija (thread)
-    const thread = await openai.beta.threads.create();
+    // Jei nėra threadId – sukuriame naują giją
+    const threadId = incomingThreadId || (await openai.beta.threads.create()).id;
 
-    // Įrašoma vartotojo žinutė
-    await openai.beta.threads.messages.create(thread.id, {
+    // Įtraukiame vartotojo žinutę į giją
+    await openai.beta.threads.messages.create(threadId, {
       role: "user",
       content: message
     });
 
-    // Paleidžiamas tavo asistentas
-    const run = await openai.beta.threads.runs.create(thread.id, {
+    // Paleidžiam asistento "run"
+    const run = await openai.beta.threads.runs.create(threadId, {
       assistant_id: "asst_ls1r6XhekISt4chsMsO42SdC"
     });
 
-    // Laukiama, kol asistento atsakymas bus paruoštas
+    // Laukiame, kol atsakymas bus paruoštas
     let runStatus;
     do {
       await new Promise(resolve => setTimeout(resolve, 1000));
-      runStatus = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+      runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
     } while (runStatus.status !== "completed" && runStatus.status !== "failed");
 
     if (runStatus.status === "failed") {
-      return res.status(500).json({ reply: "Asistentas nepavyko atsakyti." });
+      return res.status(500).json({ reply: "Asistentas nepavyko atsakyti.", threadId });
     }
 
-    // Gauti atsakymai
-    const messages = await openai.beta.threads.messages.list(thread.id);
+    // Gauti atsakymą
+    const messages = await openai.beta.threads.messages.list(threadId);
 
     const reply = messages.data
       .filter(msg => msg.role === "assistant")
@@ -50,7 +50,7 @@ export default async function handler(req, res) {
       )
       .join("\n");
 
-    res.status(200).json({ reply });
+    res.status(200).json({ reply, threadId });
   } catch (error) {
     console.error("OpenAI klaida:", error.message);
     res.status(500).json({ reply: "Klaida jungiantis prie asistento." });
