@@ -12,17 +12,21 @@ export default async function handler(req, res) {
   const { message } = req.body;
 
   try {
+    // Sukuriama pokalbio gija (thread)
     const thread = await openai.beta.threads.create();
 
+    // Įrašoma vartotojo žinutė
     await openai.beta.threads.messages.create(thread.id, {
       role: "user",
       content: message
     });
 
+    // Paleidžiamas tavo asistentas
     const run = await openai.beta.threads.runs.create(thread.id, {
       assistant_id: "asst_ls1r6XhekISt4chsMsO42SdC"
     });
 
+    // Laukiama, kol asistento atsakymas bus paruoštas
     let runStatus;
     do {
       await new Promise(resolve => setTimeout(resolve, 1000));
@@ -33,11 +37,18 @@ export default async function handler(req, res) {
       return res.status(500).json({ reply: "Asistentas nepavyko atsakyti." });
     }
 
+    // Gauti atsakymai
     const messages = await openai.beta.threads.messages.list(thread.id);
+
     const reply = messages.data
       .filter(msg => msg.role === "assistant")
-      .map(msg => msg.content.map(part => part.text).join("\\n"))
-      .join("\\n");
+      .map(msg =>
+        msg.content
+          .filter(part => part.type === "text")
+          .map(part => part.text.value)
+          .join("\n")
+      )
+      .join("\n");
 
     res.status(200).json({ reply });
   } catch (error) {
