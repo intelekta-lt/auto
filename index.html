@@ -151,7 +151,7 @@
     function appendMessage(sender, text) {
       const msg = document.createElement("div");
       msg.className = `message ${sender}`;
-      msg.innerHTML = text.replace(/\\n/g, "<br>");
+      msg.innerHTML = text.replace(/\n/g, "<br>");
       chat.appendChild(msg);
       chat.scrollTop = chat.scrollHeight;
     }
