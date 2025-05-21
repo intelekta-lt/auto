@@ -1,122 +1,132 @@
-
 <!DOCTYPE html>
 <html lang="lt">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Asistentas</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f0f2f5;
+      margin: 0;
+      font-family: 'Rajdhani', sans-serif;
+      background-color: #1C1429;
+      color: #FFFFFF;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
     }
     .chat-container {
       width: 100%;
-      max-width: 420px;
-      height: 90vh;
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
+      max-width: 380px;
+      background-color: #2E2B3A;
+      border-radius: 18px;
+      border: 2px solid #B689F4; /* Alyvinis rėmelis */
       overflow: hidden;
+      box-shadow: 0 0 16px rgba(182, 137, 244, 0.3); /* švelnus glow */
     }
     .chat-header {
-      background: #4A90E2;
-      color: white;
-      padding: 16px;
-      font-size: 18px;
+      background-color: #3C1D66;
+      padding: 14px;
+      text-align: center;
       font-weight: bold;
+      font-size: 1.1em;
+      color: #FFFFFF;
     }
     .chat-messages {
-      flex: 1;
-      padding: 16px;
+      padding: 14px;
+      height: 360px;
       overflow-y: auto;
-      background: #f9f9f9;
       display: flex;
       flex-direction: column;
+      gap: 10px;
+      background-color: #1C1429;
     }
     .message {
-      margin-bottom: 12px;
-      max-width: 80%;
       padding: 10px 14px;
       border-radius: 16px;
+      max-width: 80%;
       line-height: 1.4;
-      word-wrap: break-word;
+      font-size: 0.95em;
     }
     .user {
-      background: #DCF8C6;
       align-self: flex-end;
+      background-color: #5B2DA1;
+      color: white;
     }
     .bot {
-      background: #E4E6EB;
       align-self: flex-start;
+      background-color: #2E2B3A;
+      color: #E0E0E0;
+      border: 1px solid #3C1D66;
     }
     .chat-input {
       display: flex;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid #444;
+      background-color: #29213C;
     }
     .chat-input input {
       flex: 1;
-      padding: 12px;
+      padding: 12px 14px;
+      font-size: 1em;
       border: none;
+      border-radius: 0;
       outline: none;
-      font-size: 16px;
+      background-color: #29213C;
+      color: white;
     }
     .chat-input button {
-      padding: 0 16px;
-      background: #4A90E2;
+      background-color: #6A4ACD;
       color: white;
       border: none;
+      padding: 0 20px;
+      font-size: 1em;
       cursor: pointer;
-      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+    .chat-input button:hover {
+      background-color: #8B6EF1;
     }
   </style>
 </head>
 <body>
   <div class="chat-container">
     <div class="chat-header">AI Asistentas</div>
-    <div id="chatMessages" class="chat-messages"></div>
-    <div class="chat-input">
-      <input id="userInput" type="text" placeholder="Rašyk žinutę..." />
-      <button onclick="sendMessage()">Siųsti</button>
-    </div>
+    <div class="chat-messages" id="chat"></div>
+    <form class="chat-input" id="chat-form">
+      <input type="text" id="message-input" placeholder="Rašyk žinutę..." autocomplete="off" />
+      <button type="submit">Siųsti</button>
+    </form>
   </div>
 
   <script>
-    const chatMessages = document.getElementById("chatMessages");
+    const form = document.getElementById("chat-form");
+    const input = document.getElementById("message-input");
+    const chat = document.getElementById("chat");
 
-    function addMessage(text, sender) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const message = input.value.trim();
+      if (!message) return;
+
+      appendMessage("user", message);
+      input.value = "";
+
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message }),
+      });
+
+      const data = await response.json();
+      appendMessage("bot", data.reply || "Klaida gaunant atsakymą.");
+    });
+
+    function appendMessage(sender, text) {
       const msg = document.createElement("div");
       msg.className = `message ${sender}`;
       msg.textContent = text;
-      chatMessages.appendChild(msg);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    async function sendMessage() {
-      const input = document.getElementById("userInput");
-      const text = input.value.trim();
-      if (!text) return;
-      addMessage(text, "user");
-      input.value = "";
-
-      try {
-        const response = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-        const data = await response.json();
-        addMessage(data.reply, "bot");
-      } catch (err) {
-        addMessage("Klaida jungiantis prie serverio.", "bot");
-      }
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
     }
   </script>
 </body>
