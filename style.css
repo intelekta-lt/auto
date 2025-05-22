@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 body {
   margin: 0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #1C1429;
   color: #FFFFFF;
   display: flex;
@@ -13,25 +15,25 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: 40px;
-  padding: 20px;
+  gap: 60px;
+  padding: 20px 40px;
 }
 
-/* Kairės pusės informacinė dėžutė */
+/* Kairės informacijos blokas */
 .info-box {
   background-color: #2b203f;
   color: #ffffff;
-  padding: 24px;
+  padding: 36px;
   border-radius: 20px;
-  width: 300px;
-  box-shadow: 0 0 15px rgba(158, 111, 255, 0.3);
-  font-family: 'Arial', sans-serif;
+  width: 420px;
+  box-shadow: 0 0 18px rgba(158, 111, 255, 0.3);
+  font-family: 'Poppins', sans-serif;
 }
 
 .info-box h2 {
-  font-size: 20px;
+  font-size: 34.67px; /* 26pt */
   color: #caaeff;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .info-box ul {
@@ -40,14 +42,15 @@ body {
 }
 
 .info-box li {
-  margin-bottom: 10px;
-  line-height: 1.5;
+  font-size: 22.67px; /* 17pt */
+  margin-bottom: 16px;
+  line-height: 1.6;
 }
 
 /* Chatbox */
 .chat-container {
   width: 100%;
-  max-width: 380px;
+  max-width: 420px;
   background-color: #2E2B3A;
   border-radius: 18px;
   border: 2px solid #B689F4;
@@ -62,7 +65,7 @@ body {
   padding: 14px;
   text-align: center;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1.2em;
   color: #FFFFFF;
   position: relative;
 }
