@@ -58,7 +58,12 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ reply, threadId });
   } catch (error) {
-    console.error("OpenAI klaida:", error);
-    return res.status(500).json({ reply: "Klaida jungiantis prie asistento.", error: error.message });
+    const detailed = error?.response?.data || error.message || error;
+    console.error("OpenAI klaida:", detailed);
+
+    return res.status(500).json({
+      reply: "Klaida jungiantis prie asistento.",
+      error: detailed
+    });
   }
 }
