@@ -28,7 +28,13 @@ export default async function handler(req, res) {
 
     // Laukiame, kol atsakymas bus paruoštas
     let runStatus;
+    const maxRetries = 20;
+    let attempts = 0;
+
     do {
+      if (attempts++ > maxRetries) {
+        throw new Error("Viršytas atsakymo laukimo limitas.");
+      }
       await new Promise(resolve => setTimeout(resolve, 1000));
       runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
     } while (runStatus.status !== "completed" && runStatus.status !== "failed");
@@ -50,9 +56,9 @@ export default async function handler(req, res) {
       )
       .join("\n");
 
-    res.status(200).json({ reply, threadId });
+    return res.status(200).json({ reply, threadId });
   } catch (error) {
-    console.error("OpenAI klaida:", error.message);
-    res.status(500).json({ reply: "Klaida jungiantis prie asistento." });
+    console.error("OpenAI klaida:", error);
+    return res.status(500).json({ reply: "Klaida jungiantis prie asistento.", error: error.message });
   }
 }
