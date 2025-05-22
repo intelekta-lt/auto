@@ -65,23 +65,31 @@ body {
   position: relative;
 }
 
+/* Atnaujintas "Išvalyti" mygtukas */
 .clean-btn {
   position: absolute;
   right: 12px;
-  top: 10px;
-  background: none;
-  border: 1px solid #B689F4;
-  color: #B689F4;
-  font-size: 0.75em;
-  padding: 4px 8px;
-  border-radius: 10px;
+  top: 12px;
+  background-color: #B689F4;
+  color: white;
+  font-size: 0.85em;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  box-shadow: 0 0 10px rgba(182, 137, 244, 0.5);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .clean-btn:hover {
-  background-color: #B689F4;
+  background-color: #D5B9FA;
   color: #1C1429;
+}
+
+/* Ikonėlės vertikalus lygiavimas */
+.clean-btn svg {
+  vertical-align: middle;
+  margin-right: 6px;
 }
 
 .chat-messages {
