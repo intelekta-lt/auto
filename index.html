@@ -26,9 +26,19 @@
           <span class="status-indicator"></span>
           <span class="chat-title">Draugiškas automobilių konsultantas</span>
         </div>
-        <button class="clean-btn">Išvalyti pokalbį</button>
+        <button class="clean-btn" onclick="resetChat()">Išvalyti pokalbį</button>
       </div>
+
+      <!-- Checkbox'ai pasirinkimui -->
+      <div class="car-selector">
+        <label><input type="checkbox" value="BMW"> BMW</label>
+        <label><input type="checkbox" value="Audi"> Audi</label>
+        <label><input type="checkbox" value="Toyota"> Toyota</label>
+      </div>
+
+      <!-- Pokalbio zona -->
       <div class="chat-messages" id="chat"></div>
+
       <form class="chat-input" id="chat-form">
         <input type="text" id="message-input" placeholder="Rašyk žinutę..." autocomplete="off" />
         <button type="submit" class="send-btn">Siųsti</button>
@@ -45,8 +55,16 @@
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const message = input.value.trim();
+      let message = input.value.trim();
       if (!message) return;
+
+      // Surenkame pažymėtas automobilių markes
+      const selectedBrands = Array.from(document.querySelectorAll('.car-selector input:checked'))
+        .map(input => input.value);
+
+      if (selectedBrands.length > 0) {
+        message = `Pasirinktos markės: ${selectedBrands.join(', ')}\n\n${message}`;
+      }
 
       appendMessage("user", message);
       input.value = "";
@@ -77,3 +95,4 @@
   </script>
 </body>
 </html>
+
