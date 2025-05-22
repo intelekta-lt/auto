@@ -9,7 +9,7 @@
 <body>
   <div class="layout-container">
 
-    <!-- Kairės informacijos blokas -->
+    <!-- 1. Intelekto aprašymas -->
     <div class="info-box">
       <h2>KĄ GALI ŠIS INTELEKTAS</h2>
       <p>AI asistentas padeda greitai išsirinkti tinkamą naudotą automobilį pagal jūsų poreikius – atsižvelgdamas į kainą, markę, kuro tipą ar šeimos dydį.</p>
@@ -19,7 +19,7 @@
       <p>Registruoja bandomuosius važiavimus ir atsako į visus su automobilio įsigijimu susijusius klausimus.</p>
     </div>
 
-    <!-- Chatbox -->
+    <!-- 2. Chatbox -->
     <div class="chat-container">
       <div class="chat-header">
         <div class="chat-status-row">
@@ -29,14 +29,6 @@
         <button class="clean-btn" onclick="resetChat()">Išvalyti pokalbį</button>
       </div>
 
-      <!-- Checkbox'ai pasirinkimui -->
-      <div class="car-selector">
-        <label><input type="checkbox" value="BMW"> BMW</label>
-        <label><input type="checkbox" value="Audi"> Audi</label>
-        <label><input type="checkbox" value="Toyota"> Toyota</label>
-      </div>
-
-      <!-- Pokalbio zona -->
       <div class="chat-messages" id="chat"></div>
 
       <form class="chat-input" id="chat-form">
@@ -44,6 +36,15 @@
         <button type="submit" class="send-btn">Siųsti</button>
       </form>
     </div>
+
+    <!-- 3. DM su checkbox'ais -->
+    <div class="dm-box">
+      <h3>Pasirink automobilį</h3>
+      <label><input type="checkbox" name="auto" value="A004"> Chevrolet Camaro</label>
+      <label><input type="checkbox" name="auto" value="A006"> BMW 118</label>
+      <label><input type="checkbox" name="auto" value="A010"> Toyota RAV4</label>
+    </div>
+
   </div>
 
   <script>
@@ -58,12 +59,61 @@
       let message = input.value.trim();
       if (!message) return;
 
-      // Surenkame pažymėtas automobilių markes
-      const selectedBrands = Array.from(document.querySelectorAll('.car-selector input:checked'))
+      const selectedIds = Array.from(document.querySelectorAll('input[name="auto"]:checked'))
         .map(input => input.value);
 
-      if (selectedBrands.length > 0) {
-        message = `Pasirinktos markės: ${selectedBrands.join(', ')}\n\n${message}`;
+      const cars = {
+        A004: {
+          "marke": "Chevrolet",
+          "modelis": "Camaro",
+          "metai": "2015",
+          "kebulo_tipas": "Coupe",
+          "kuras": "Benzinas",
+          "variklis": "3.6l",
+          "galia_kw": 250,
+          "pavaru_deze": "Automatinė",
+          "rida_km": 155000,
+          "klimato_kontrole": true,
+          "kaina_eur": 16500,
+          "lizingo_kaina_per_menesi_eur": 170.49,
+          "id": "A004"
+        },
+        A006: {
+          "marke": "BMW",
+          "modelis": "118",
+          "metai": "2006",
+          "kebulo_tipas": "Hečbekas",
+          "kuras": "Dyzelinas",
+          "variklis": "2.0l",
+          "galia_kw": 90,
+          "pavaru_deze": "Mechaninė",
+          "rida_km": 303300,
+          "klimato_kontrole": false,
+          "kaina_eur": 2350,
+          "lizingo_kaina_per_menesi_eur": 30.29,
+          "id": "A006"
+        },
+        A010: {
+          "marke": "Toyota",
+          "modelis": "RAV4",
+          "metai": "2009",
+          "kebulo_tipas": "Visureigis",
+          "kuras": "Dyzelinas",
+          "variklis": "2.2l",
+          "galia_kw": 110,
+          "pavaru_deze": "Mechaninė",
+          "rida_km": 184423,
+          "klimato_kontrole": true,
+          "kaina_eur": 6300,
+          "lizingo_kaina_per_menesi_eur": 69.42,
+          "id": "A010"
+        }
+      };
+
+      const selectedCars = selectedIds.map(id => cars[id]);
+
+      if (selectedCars.length > 0) {
+        message = `Pasirinkti automobiliai:\n${JSON.stringify(selectedCars, null, 2)}\n\n${message}`;
       }
 
       appendMessage("user", message);
@@ -95,4 +145,3 @@
   </script>
 </body>
 </html>
-
