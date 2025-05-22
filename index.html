@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Asistentas</title>
+  <title>Draugiškas automobilių konsultantas</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -21,8 +21,11 @@
 
     <!-- Chatbox -->
     <div class="chat-container">
-      <div class="chat-header structured-header">
-        <span class="chat-title">Draugiškas automobilių konsultantas</span>
+      <div class="chat-header">
+        <div class="chat-status">
+          <span class="status-indicator"></span>
+          <span class="chat-title">Draugiškas automobilių konsultantas</span>
+        </div>
         <button class="clean-btn" onclick="resetChat()"><strong>Išvalyti pokalbį</strong></button>
       </div>
       <div class="chat-messages" id="chat"></div>
