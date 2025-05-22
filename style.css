@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
   margin: 0;
@@ -55,39 +55,47 @@ body {
   flex-direction: column;
 }
 
-/* Apple-like structured header */
+/* Viršutinė juosta su statusu */
 .chat-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #3C1D66;
-  padding: 12px 16px;
-  color: #FFFFFF;
-  font-size: 1em;
-  font-weight: 600;
-  position: relative;
+  padding: 10px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.chat-title {
-  flex: 1;
-  text-align: center;
-  font-weight: 600;
-  color: #ffffff;
-  font-size: 1em;
-  letter-spacing: 0.3px;
+.chat-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-/* Mygtukas: Išvalyti pokalbį */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: #4ADE80;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(74, 222, 128, 0.7);
+}
+
+.chat-title {
+  font-size: 0.85em;
+  font-weight: 300;
+  color: #E0E0E0;
+  letter-spacing: 0.2px;
+}
+
+/* Išvalyti mygtukas */
 .clean-btn {
   background-color: #B689F4;
   color: white;
-  font-size: 0.85em;
+  font-size: 0.8em;
   padding: 6px 12px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 500;
   box-shadow: 0 0 8px rgba(182, 137, 244, 0.3);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
