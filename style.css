@@ -21,36 +21,37 @@ body {
 
 /* Kairės informacijos blokas */
 .info-box {
-  background-color: #2b203f;
+  background-color: #2E2B3A;
   color: #ffffff;
-  padding: 36px;
-  border-radius: 20px;
-  width: 420px;
-  box-shadow: 0 0 18px rgba(158, 111, 255, 0.3);
+  padding: 24px;
+  border-radius: 18px;
+  width: 380px;
+  height: 420px;
+  box-shadow: 0 0 16px rgba(182, 137, 244, 0.4);
+  border: 2px solid #B689F4;
   font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
 }
 
 .info-box h2 {
-  font-size: 34.67px; /* 26pt */
-  color: #caaeff;
-  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #D5B9FA;
+  margin-bottom: 10px;
 }
 
-.info-box ul {
-  list-style: none;
-  padding-left: 0;
+.info-box p {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
 }
 
-.info-box li {
-  font-size: 22.67px; /* 17pt */
-  margin-bottom: 16px;
-  line-height: 1.6;
-}
-
-/* Chatbox */
+/* Chat dėžutė */
 .chat-container {
-  width: 100%;
-  max-width: 420px;
+  width: 380px;
   background-color: #2E2B3A;
   border-radius: 18px;
   border: 2px solid #B689F4;
@@ -65,7 +66,7 @@ body {
   padding: 14px;
   text-align: center;
   font-weight: bold;
-  font-size: 1.2em;
+  font-size: 1.1em;
   color: #FFFFFF;
   position: relative;
 }
