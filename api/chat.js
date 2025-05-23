@@ -1,69 +1,41 @@
-import OpenAI from "openai";
+let threadId = null;
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-});
+const form = document.getElementById("chat-form");
+const input = document.getElementById("message-input");
+const chat = document.getElementById("chat");
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Tik POST metodas leidžiamas" });
-  }
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const message = input.value.trim();
+  if (!message) return;
 
-  const { message, threadId: incomingThreadId } = req.body;
+  appendMessage("user", message);
+  input.value = "";
 
   try {
-    // Jei nėra threadId – sukuriame naują giją
-    const threadId = incomingThreadId || (await openai.beta.threads.create()).id;
-
-    // Įtraukiame vartotojo žinutę į giją
-    await openai.beta.threads.messages.create(threadId, {
-      role: "user",
-      content: message
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, threadId })
     });
 
-    // Paleidžiame asistento "run"
-    const run = await openai.beta.threads.runs.create(threadId, {
-      assistant_id: "asst_ls1r6XhekISt4chsMsO42SdC"
-    });
-
-    // Laukiame, kol atsakymas bus paruoštas
-    let runStatus;
-    const maxRetries = 20;
-    let attempts = 0;
-
-    do {
-      if (attempts++ > maxRetries) {
-        throw new Error("Viršytas atsakymo laukimo limitas.");
-      }
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
-    } while (runStatus.status !== "completed" && runStatus.status !== "failed");
-
-    if (runStatus.status === "failed") {
-      return res.status(500).json({ reply: "Asistentas nepavyko atsakyti.", threadId });
-    }
-
-    // Gauti atsakymą
-    const messages = await openai.beta.threads.messages.list(threadId);
-
-    const reply = messages.data
-      .filter(msg => msg.role === "assistant")
-      .map(msg =>
-        msg.content
-          .filter(part => part.type === "text")
-          .map(part => part.text.value)
-          .join("\n")
-      )
-      .join("\n");
-
-    return res.status(200).json({ reply, threadId });
-  } catch (error) {
-    const detailed = error?.response?.data || error.message || error;
-    console.error("OpenAI klaida:", detailed);
-
-    return res.status(500).json({
-      reply: "Klaida jungiantis prie asistento.",
-      error: detailed
-    });
+    const data = await response.json();
+    appendMessage("bot", data.reply || "Klaida gaunant atsakymą.");
+    if (data.threadId) threadId = data.threadId;
+  } catch (err) {
+    appendMessage("bot", "Nepavyko prisijungti prie asistento.");
   }
+});
+
+function appendMessage(sender, text) {
+  const msg = document.createElement("div");
+  msg.className = `message ${sender}`;
+  msg.innerHTML = text.replace(/\n/g, "<br>");
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function resetChat() {
+  chat.innerHTML = "";
+  threadId = null;
 }
