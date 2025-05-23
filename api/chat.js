@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       content: message
     });
 
-    // Paleidžiam asistento "run"
+    // Paleidžiame asistento "run"
     const run = await openai.beta.threads.runs.create(threadId, {
       assistant_id: "asst_ls1r6XhekISt4chsMsO42SdC"
     });
