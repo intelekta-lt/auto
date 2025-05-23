@@ -19,7 +19,7 @@ body {
   padding: 40px;
 }
 
-/* Kairės informacijos blokas */
+/* Informacinis blokas */
 .info-box {
   background-color: #2b203f;
   color: #ffffff;
@@ -54,7 +54,6 @@ body {
   flex-direction: column;
 }
 
-/* Header viena linija */
 .chat-header {
   display: flex;
   justify-content: space-between;
@@ -91,7 +90,6 @@ body {
   text-overflow: ellipsis;
 }
 
-/* Išvalyti mygtukas */
 .clean-btn {
   background-color: #B689F4;
   color: white;
@@ -141,7 +139,6 @@ body {
   border: 1px solid #3C1D66;
 }
 
-/* Chat Input */
 .chat-input {
   display: flex;
   align-items: center;
