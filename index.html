@@ -1,78 +1,40 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Draugiškas automobilių konsultantas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="layout-container">
+    <!-- Informacinis blokas -->
+    <div class="info-box">
+      <h2>KĄ GALI ŠIS INTELEKTAS</h2>
+      <p>AI asistentas padeda greitai išsirinkti tinkamą naudotą automobilį pagal jūsų poreikius – atsižvelgdamas į kainą, markę, kuro tipą ar šeimos dydį.</p>
+      <p>Pateikia rekomendacijas net jei neturite tikslaus modelio – pakanka apibūdinti, kokio tipo automobilio ieškote.</p>
+      <p>Galite iškart sužinoti, ar konkretus automobilis yra laisvas, o jei taip – užregistruoti laiką apžiūrai automobilių aikštelėje.</p>
+      <p>Atsako į klausimus apie lizingo sąlygas ir pateikia nuorodą į skaičiuoklę, kurioje galite sužinoti įmokas.</p>
+      <p>Registruoja bandomuosius važiavimus ir atsako į visus su automobilio įsigijimu susijusius klausimus.</p>
+    </div>
 
-body {
-  margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background-color: #1C1429;
-  color: #FFFFFF;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+    <!-- Chatbox -->
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="chat-status-row">
+          <span class="status-indicator"></span>
+          <span class="chat-title">Draugiškas automobilių konsultantas</span>
+        </div>
+        <button class="clean-btn" onclick="resetChat()">Išvalyti pokalbį</button>
+      </div>
+      <div class="chat-messages" id="chat"></div>
+      <form class="chat-input" id="chat-form">
+        <input type="text" id="message-input" placeholder="Rašyk žinutę..." autocomplete="off" />
+        <button type="submit" class="send-btn">Siųsti</button>
+      </form>
+    </div>
+  </div>
 
-.layout-container {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 40px;
-  padding: 40px;
-}
-
-/* Informacinis blokas */
-.info-box {
-  background-color: #2b203f;
-  color: #ffffff;
-  padding: 24px;
-  border-radius: 16px;
-  width: 340px;
-  box-shadow: 0 0 16px rgba(158, 111, 255, 0.3);
-  border: 1px solid #B689F4;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.info-box h2 {
-  font-size: 20px;
-  color: #caaeff;
-  margin-bottom: 14px;
-}
-
-.info-box p {
-  margin-bottom: 12px;
-}
-
-/* Chat Box */
-.chat-container {
-  width: 440px;
-  background-color: #2E2B3A;
-  border-radius: 18px;
-  border: 2px solid #B689F4;
-  overflow: hidden;
-  box-shadow: 0 0 16px rgba(182, 137, 244, 0.4);
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #3C1D66;
-  padding: 10px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.chat-status-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 1;
-  overflow: hidden;
-}
-
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  background-color: #4ADE80;
-  borde
+  <script src="script.js"></script>
+</body>
+</html>
