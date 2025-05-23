@@ -19,8 +19,8 @@ export default async function handler(req, res) {
       content: message
     });
 
-    const run = await openai.beta.threads.runs.create(threadId, {
-      assistant_id: "asst_ls1r6XhekISt4chsMsO42SdC" // ← čia įrašai ID
+    let run = await openai.beta.threads.runs.create(threadId, {
+      assistant_id: "asst_ls1r6XhekISt4chsMsO42SdC"
     });
 
     let runStatus;
@@ -31,6 +31,25 @@ export default async function handler(req, res) {
       if (attempts++ > maxRetries) throw new Error("Viršytas laukimo limitas.");
       await new Promise(resolve => setTimeout(resolve, 1000));
       runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+
+      // Jei asistentas laukia įrankių rezultatų
+      if (runStatus.status === "requires_action") {
+        const toolCalls = runStatus.required_action?.submit_tool_outputs?.tool_calls;
+
+        // Atsiųsti tuščią atsakymą – jei nenori realiai vykdyti funkcijų
+        const toolOutputs = toolCalls.map(call => ({
+          tool_call_id: call.id,
+          output: "Šiuo metu funkcijos iškvietimas neaktyvus (demo režimas)."
+        }));
+
+        await openai.beta.threads.runs.submitToolOutputs(threadId, run.id, {
+          tool_outputs: toolOutputs
+        });
+
+        // Laukti toliau
+        runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+      }
+
     } while (runStatus.status !== "completed" && runStatus.status !== "failed");
 
     if (runStatus.status === "failed") {
@@ -55,3 +74,4 @@ export default async function handler(req, res) {
     return res.status(500).json({ reply: "Klaida jungiantis prie asistento." });
   }
 }
+
